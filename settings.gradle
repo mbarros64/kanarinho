@@ -1,2 +1,2 @@
 rootProject.name='Brazutils'
-include ':app'
+include ':sample'
