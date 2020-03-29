@@ -1,6 +1,6 @@
 package com.adrianotelesc.brazutils.core
 
-class CpfUtil {
+class CpfNumberUtil {
     fun isValidCpf(cpf: String): Boolean {
         if (!cpf.matches(FORMATTED_CPF_REGEX) && !cpf.matches(UNFORMATTED_CPF_REGEX))
             return false

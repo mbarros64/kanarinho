@@ -7,9 +7,9 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class CpfUtilTest {
+class CpfNumberUtilTest {
 
-    private val util = CpfUtil()
+    private val util = CpfNumberUtil()
 
     @Nested
     inner class IsValidCpf {
