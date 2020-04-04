@@ -1,41 +1,50 @@
 package com.adrianotelesc.brazutils.core
 
-class CpfNumberUtil {
-    fun isValidCpf(cpf: String): Boolean {
-        if (!cpf.matches(FORMATTED_CPF_REGEX) && !cpf.matches(UNFORMATTED_CPF_REGEX))
-            return false
+object CpfNumberUtil {
 
-        val unformattedCpf = cpf.replace(NON_DIGIT_REGEX, "")
+    fun isValidCpf(cpfNumber: String): Boolean {
+        if (cpfNumber.notContainsAny(FORMATTED_CPF_REGEX, UNFORMATTED_CPF_REGEX)) return false
 
-        return unformattedCpf[9].toString().toInt() == calculateFirstCheckDigit(unformattedCpf) &&
-                unformattedCpf[10].toString().toInt() == calculateSecondCheckDigit(unformattedCpf)
+        val cpfDigitsOnly =
+            if (cpfNumber.matches(FORMATTED_CPF_REGEX)) cpfNumber.removeNotDigits() else cpfNumber
+
+        if (cpfDigitsOnly.hasRepeatedDigits(numberOfRepeatedDigits = 10)) return false
+
+        val firstNineDigits = cpfDigitsOnly.take(9)
+        val validFirstCheckDigit = calculateCheckDigitBy(firstNineDigits)
+
+        val firstCheckDigit = cpfDigitsOnly[FIRST_CHECK_DIGIT_INDEX].toNumericValue()
+
+        if (firstCheckDigit != validFirstCheckDigit) return false
+
+        val firstTenDigits = cpfDigitsOnly.take(10)
+        val validSecondCheckDigit = calculateCheckDigitBy(firstTenDigits)
+
+        val secondCheckDigit = cpfDigitsOnly[SECOND_CHECK_DIGIT_INDEX].toNumericValue()
+
+        if (secondCheckDigit != validSecondCheckDigit) return false
+
+        return true
     }
 
-    private fun calculateFirstCheckDigit(cpf: String): Int {
-        val firstNine = cpf.substring(0, 9)
-        var multiplier = 10
-        val sum = firstNine.sumBy { char ->
-            val digitValue = char.toString().toInt()
-            digitValue * multiplier--
+    private fun calculateCheckDigitBy(cpfDigits: String): Int {
+        if (cpfDigits.length !in 9..10)
+            throw IllegalArgumentException("Cannot calculate the check digit correctly")
+
+        val reversedCpfDigits = cpfDigits.reversed()
+        val sum = reversedCpfDigits.sumIndexedBy { index, digit ->
+            val number = digit.toNumericValue()
+            val weight = 2 + index
+
+            number * weight
         }
-        val mod11 = sum.rem(11)
-        return if (mod11 in 0..1) 0 else 11 - mod11
+
+        val mod11 = sum % 11
+        return if (mod11 < 2) 0 else 11 - mod11
     }
 
-    private fun calculateSecondCheckDigit(cpf: String): Int {
-        val firstTen = cpf.substring(0, 10)
-        var multiplier = 11
-        val sum = firstTen.sumBy { char ->
-            val digitValue = char.toString().toInt()
-            digitValue * multiplier--
-        }
-        val mod11 = sum.rem(11)
-        return if (mod11 in 0..1) 0 else 11 - mod11
-    }
-
-    companion object {
-        val FORMATTED_CPF_REGEX = Regex("""^\d{3}.\d{3}.\d{3}-\d{2}$""")
-        val UNFORMATTED_CPF_REGEX = Regex("""^\d{11}$""")
-        val NON_DIGIT_REGEX = Regex("""\D""")
-    }
+    private val FORMATTED_CPF_REGEX = Regex("""^\d{3}.\d{3}.\d{3}-\d{2}${'$'}""")
+    private val UNFORMATTED_CPF_REGEX = Regex("""^\d{11}$""")
+    private const val FIRST_CHECK_DIGIT_INDEX = 9
+    private const val SECOND_CHECK_DIGIT_INDEX = 10
 }
