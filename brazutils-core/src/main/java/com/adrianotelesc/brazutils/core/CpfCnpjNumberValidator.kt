@@ -2,7 +2,7 @@ package com.adrianotelesc.brazutils.core
 
 object CpfCnpjNumberValidator {
 
-    fun isValidCnpj(input: String): Boolean {
+    fun isValidCnpjNumber(input: String): Boolean {
         if (input.notMatchesAny(FORMATTED_CNPJ_REGEX, UNFORMATTED_CNPJ_REGEX)) return false
 
         val sanitizedInput = input.removeNotDigits()
@@ -30,15 +30,15 @@ object CpfCnpjNumberValidator {
         require(cnpjDigits.size in 12..13) { "Cannot calculate the cnpj check digit correctly" }
 
         val weights = arrayOf(6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2).reversed()
-        val reversedCpfDigits = cnpjDigits.reversed()
+        val reversedCnpjDigits = cnpjDigits.reversed()
 
-        val sum = reversedCpfDigits.mapIndexed { index, digit -> digit * weights[index] }.sum()
+        val sum = reversedCnpjDigits.mapIndexed { index, digit -> digit * weights[index] }.sum()
 
         val mod11 = sum % 11
         return if (mod11 < 2) 0 else 11 - mod11
     }
 
-    fun isValidCpf(input: String): Boolean {
+    fun isValidCpfNumber(input: String): Boolean {
         if (input.notMatchesAny(FORMATTED_CPF_REGEX, UNFORMATTED_CPF_REGEX)) return false
 
         val sanitizedInput = input.removeNotDigits()
