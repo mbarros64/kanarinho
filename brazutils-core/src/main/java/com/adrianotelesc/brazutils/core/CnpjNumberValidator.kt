@@ -9,33 +9,27 @@ object CnpjNumberValidator {
 
         if (sanitizedInput.hasRepeatedDigits(MAXIMUM_REPEATED_DIGITS)) return false
 
-        val firstNineDigits = sanitizedInput.take(12).digits()
-        val expectedFirstCheckDigit = calculateCheckDigit(firstNineDigits)
-
         val actualFirstCheckDigit = sanitizedInput[FIRST_CHECK_DIGIT_INDEX].toNumericValue()
+        val expectedFirstCheckDigit = sanitizedInput.take(12).digits().let { mod11CheckDigit(it) }
 
         if (actualFirstCheckDigit != expectedFirstCheckDigit) return false
 
-        val firstTenDigits = sanitizedInput.take(13).digits()
-        val expectedSecondCheckDigit = calculateCheckDigit(firstTenDigits)
-
         val actualSecondCheckDigit = sanitizedInput[SECOND_CHECK_DIGIT_INDEX].toNumericValue()
+        val expectedSecondCheckDigit = sanitizedInput.take(13).digits().let { mod11CheckDigit(it) }
 
         if (actualSecondCheckDigit != expectedSecondCheckDigit) return false
 
         return true
     }
 
-    private fun calculateCheckDigit(digits: List<Int>): Int {
-        require(digits.size in 12..13) { "Cannot calculate the cnpj check digit correctly" }
+    private fun mod11CheckDigit(digits: List<Int>): Int {
+        require(digits.size in 12..13)
 
-        val weights = arrayOf(6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2).reversed()
-        val reversedCnpjDigits = digits.reversed()
-
-        val sum = reversedCnpjDigits.mapIndexed { index, digit -> digit * weights[index] }.sum()
-
-        val mod11 = sum % 11
-        return if (mod11 < 2) 0 else 11 - mod11
+        val mod11 = digits.reversed().mapIndexed { index, digit ->
+            val weight = if (index > 7) (index + 4) % 10 else index + 2
+            digit * weight
+        }.sum() % 11
+        return if (mod11 in 0..1) 0 else 11 - mod11
     }
 
     private val FORMATTED_CNPJ_REGEX = Regex("""^\d{2}.\d{3}.\d{3}/\d{4}-\d{2}$""")

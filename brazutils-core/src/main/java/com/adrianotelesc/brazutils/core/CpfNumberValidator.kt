@@ -9,36 +9,27 @@ object CpfNumberValidator {
 
         if (sanitizedInput.hasRepeatedDigits(MAXIMUM_REPEATED_DIGITS)) return false
 
-        val firstNineDigits = sanitizedInput.take(9).digits()
-        val expectedFirstCheckDigit = calculateCheckDigit(firstNineDigits)
-
         val actualFirstCheckDigit = sanitizedInput[FIRST_CHECK_DIGIT_INDEX].toNumericValue()
+        val expectedFirstCheckDigit = sanitizedInput.take(9).digits().let { mod11CheckDigit(it) }
 
         if (actualFirstCheckDigit != expectedFirstCheckDigit) return false
 
-        val firstTenDigits = sanitizedInput.take(10).digits()
-        val validSecondCheckDigit = calculateCheckDigit(firstTenDigits)
+        val actualSecondCheckDigit = sanitizedInput[SECOND_CHECK_DIGIT_INDEX].toNumericValue()
+        val expectedSecondCheckDigit = sanitizedInput.take(10).digits().let { mod11CheckDigit(it) }
 
-        val secondCheckDigit = sanitizedInput[SECOND_CHECK_DIGIT_INDEX].toNumericValue()
-
-        if (secondCheckDigit != validSecondCheckDigit) return false
+        if (actualSecondCheckDigit != expectedSecondCheckDigit) return false
 
         return true
     }
 
-    private fun calculateCheckDigit(digits: List<Int>): Int {
-        require(digits.size in 9..10) { "Cannot calculate the cpf check digit correctly" }
+    private fun mod11CheckDigit(digits: List<Int>): Int {
+        require(digits.size in 9..10)
 
-        val reversedCpfDigits = digits.reversed()
-
-        val sum = reversedCpfDigits.mapIndexed { index, digit ->
-            val weight = 2 + index
-
+        val mod11 = digits.reversed().mapIndexed { index, digit ->
+            val weight = index + 2
             digit * weight
-        }.sum()
-
-        val mod11 = sum % 11
-        return if (mod11 < 2) 0 else 11 - mod11
+        }.sum() % 11
+        return if (mod11 in 0..1) 0 else 11 - mod11
     }
 
     private val FORMATTED_CPF_REGEX = Regex("""^\d{3}.\d{3}.\d{3}-\d{2}$""")
