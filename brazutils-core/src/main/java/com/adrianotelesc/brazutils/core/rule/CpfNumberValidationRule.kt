@@ -1,8 +1,12 @@
-package com.adrianotelesc.brazutils.core
+package com.adrianotelesc.brazutils.core.rule
 
-object CpfNumberValidator {
+import com.adrianotelesc.brazutils.core.*
 
-    fun isValid(input: String): Boolean {
+class CpfNumberValidationRule : ValidationRule<String> {
+
+    override fun validate(input: String?): Boolean {
+        if (input == null) return false
+
         if (input.notMatchesAny(FORMATTED_CPF_REGEX, UNFORMATTED_CPF_REGEX)) return false
 
         val sanitizedInput = input.removeNotDigits()
@@ -32,12 +36,14 @@ object CpfNumberValidator {
         return if (mod11 in 0..1) 0 else 11 - mod11
     }
 
-    private val FORMATTED_CPF_REGEX = Regex("""^\d{3}.\d{3}.\d{3}-\d{2}$""")
-    private val UNFORMATTED_CPF_REGEX = Regex("""^\d{11}$""")
+    companion object {
+        private val FORMATTED_CPF_REGEX = Regex("""^\d{3}.\d{3}.\d{3}-\d{2}$""")
+        private val UNFORMATTED_CPF_REGEX = Regex("""^\d{11}$""")
 
-    private const val MAXIMUM_REPEATED_DIGITS = 10
+        private const val MAXIMUM_REPEATED_DIGITS = 10
 
-    private const val FIRST_CHECK_DIGIT_INDEX = 9
-    private const val SECOND_CHECK_DIGIT_INDEX = 10
+        private const val FIRST_CHECK_DIGIT_INDEX = 9
+        private const val SECOND_CHECK_DIGIT_INDEX = 10
+    }
 
 }

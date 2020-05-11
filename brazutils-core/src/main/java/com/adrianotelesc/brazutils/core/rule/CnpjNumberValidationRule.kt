@@ -1,8 +1,12 @@
-package com.adrianotelesc.brazutils.core
+package com.adrianotelesc.brazutils.core.rule
 
-object CnpjNumberValidator {
+import com.adrianotelesc.brazutils.core.*
 
-    fun isValid(input: String): Boolean {
+class CnpjNumberValidationRule : ValidationRule<String> {
+
+    override fun validate(input: String?): Boolean {
+        if (input == null) return false
+
         if (input.notMatchesAny(FORMATTED_CNPJ_REGEX, UNFORMATTED_CNPJ_REGEX)) return false
 
         val sanitizedInput = input.removeNotDigits()
@@ -32,12 +36,14 @@ object CnpjNumberValidator {
         return if (mod11 in 0..1) 0 else 11 - mod11
     }
 
-    private val FORMATTED_CNPJ_REGEX = Regex("""^\d{2}.\d{3}.\d{3}/\d{4}-\d{2}$""")
-    private val UNFORMATTED_CNPJ_REGEX = Regex("""^\d{14}$""")
+    companion object {
+        private val FORMATTED_CNPJ_REGEX = Regex("""^\d{2}.\d{3}.\d{3}/\d{4}-\d{2}$""")
+        private val UNFORMATTED_CNPJ_REGEX = Regex("""^\d{14}$""")
 
-    private const val MAXIMUM_REPEATED_DIGITS = 13
+        private const val MAXIMUM_REPEATED_DIGITS = 13
 
-    private const val FIRST_CHECK_DIGIT_INDEX = 12
-    private const val SECOND_CHECK_DIGIT_INDEX = 13
+        private const val FIRST_CHECK_DIGIT_INDEX = 12
+        private const val SECOND_CHECK_DIGIT_INDEX = 13
+    }
 
 }
