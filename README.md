@@ -1,2 +1,2 @@
-# brazutils
-A library that provides Brazilian format utilities for Android.
+# Kanarinho
+Kanarinho is a powerful fluent DSL for validation and formatting Brazilian documents in Kotlin.
