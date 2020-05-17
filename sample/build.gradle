@@ -7,7 +7,7 @@ android {
     buildToolsVersion "29.0.3"
 
     defaultConfig {
-        applicationId "com.adrianotelesc.brazutils.sample"
+        applicationId "com.adrianotelesc.kanarinho.sample"
         minSdkVersion 15
         targetSdkVersion 29
         versionCode 1

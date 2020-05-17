@@ -1,4 +1,4 @@
-package com.adrianotelesc.kanarinho.sample
+package com.adrianotelesc.kanarinho
 
 import org.junit.Test
 

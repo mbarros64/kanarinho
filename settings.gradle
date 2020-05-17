@@ -1,4 +1,4 @@
-rootProject.name='Brazutils'
+rootProject.name='kanarinho'
 include ':sample'
-include ':brazutils'
-include ':brazutils-core'
+include ':kanarinho-android'
+include ':kanarinho-core'
