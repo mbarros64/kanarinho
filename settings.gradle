@@ -1,4 +1,0 @@
-rootProject.name='kanarinho'
-include ':sample'
-include ':kanarinho-android'
-include ':kanarinho-core'
