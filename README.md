@@ -1,4 +1,4 @@
-<h1 align="center"><img src="content/logotype.png"></h1>
+<h1 align="center"><img src="content/logotype.svg"></h1>
 
 <p align="center">
 	<a href= "https://travis-ci.org/adrianotelesc/kanarinho">
@@ -16,3 +16,4 @@
 <p align="center">
   Kanarinho is a powerful fluent DSL for validation and formatting Brazilian patterns in Kotlin, inspirated by <a href="https://github.com/concretesolutions/canarinho">Canarinho</a>
 </p>
+
