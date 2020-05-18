@@ -11,9 +11,7 @@
 		<img src="https://img.shields.io/badge/license-Apache%20License%202.0-blue.svg">
 	</a>
 </p>
-
-
 <p align="center">
-  Kanarinho is a powerful fluent DSL for validation and formatting Brazilian patterns in Kotlin, inspirated by <a href="https://github.com/concretesolutions/canarinho">Canarinho</a>
+  Kanarinho is a powerful fluent DSL for validation and formatting Brazilian patterns in Android/Kotlin, inspirated by <a href="https://github.com/concretesolutions/canarinho">Canarinho</a>.
 </p>
 
