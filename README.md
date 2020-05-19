@@ -12,6 +12,6 @@
 	</a>
 </p>
 <p align="center">
-  Kanarinho is a powerful fluent DSL for validation and formatting Brazilian patterns in Android/Kotlin, inspirated by <a href="https://github.com/concretesolutions/canarinho">Canarinho</a>.
+  Kanarinho is a lightweight library for validation and formatting Brazilian patterns in Android/Kotlin, inspirated by <a href="https://github.com/concretesolutions/canarinho">Canarinho</a>.
 </p>
 
